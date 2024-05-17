@@ -24,22 +24,18 @@ public class JobData {
     private static final String DATA_FILE = "job_data.csv";
     private static boolean isDataLoaded = false;
 
-    private static ArrayList<Job> allJobs;
+    private static ArrayList<Job> allJobs = new ArrayList<>();
     private static ArrayList<Employer> allEmployers = new ArrayList<>();
     private static ArrayList<Location> allLocations = new ArrayList<>();
     private static ArrayList<PositionType> allPositionTypes = new ArrayList<>();
     private static ArrayList<CoreCompetency> allCoreCompetency = new ArrayList<>();
-    private static Set<String> allDepartments = new HashSet<>(); // Using Set to avoid duplicates
 
     /**
      * Fetch list of all job objects from loaded data,
      * without duplicates, then return a copy.
      */
     public static ArrayList<Job> findAll() {
-
-        // Load data, if not already loaded
         loadData();
-
         return new ArrayList<>(allJobs);
     }
 
@@ -54,10 +50,7 @@ public class JobData {
      * @return List of all jobs matching the criteria.
      */
     public static ArrayList<Job> findByColumnAndValue(String column, String value) {
-
-        // Load data, if not already loaded
         loadData();
-
         ArrayList<Job> jobs = new ArrayList<>();
 
         if (value.toLowerCase().equals("all")){
@@ -69,9 +62,7 @@ public class JobData {
             return jobs;
         }
         for (Job job : allJobs) {
-
             String aValue = getFieldValue(job, column);
-
             if (aValue != null && aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
             }
@@ -80,20 +71,18 @@ public class JobData {
         return jobs;
     }
 
-    public static String getFieldValue(Job job, String fieldName){
+    public static String getFieldValue(Job job, String fieldName) {
         String theValue;
-        if (fieldName.equals("name")){
+        if (fieldName.equals("name")) {
             theValue = job.getName();
-        } else if (fieldName.equals("employer")){
+        } else if (fieldName.equals("employer")) {
             theValue = job.getEmployer().toString();
-        } else if (fieldName.equals("location")){
+        } else if (fieldName.equals("location")) {
             theValue = job.getLocation().toString();
-        } else if (fieldName.equals("positionType")){
+        } else if (fieldName.equals("positionType")) {
             theValue = job.getPositionType().toString();
-        } else if (fieldName.equals("coreCompetency")){
+        } else if (fieldName.equals("coreCompetency")) {
             theValue = job.getCoreCompetency().toString();
-        } else if (fieldName.equals("department")){
-            theValue = job.getDepartment(); // Add department case
         } else {
             theValue = "";
         }
@@ -105,17 +94,13 @@ public class JobData {
      * Search all Job fields for the given term.
      *
      * @param value The search term to look for.
-     * @return      List of all jobs with at least one field containing the value.
+     * @return List of all jobs with at least one field containing the value.
      */
     public static ArrayList<Job> findByValue(String value) {
-
-        // Load data, if not already loaded
         loadData();
-
         ArrayList<Job> jobs = new ArrayList<>();
 
         for (Job job : allJobs) {
-
             if (job.getName().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
             } else if (job.getEmployer().toString().toLowerCase().contains(value.toLowerCase())) {
@@ -125,8 +110,6 @@ public class JobData {
             } else if (job.getPositionType().toString().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
             } else if (job.getCoreCompetency().toString().toLowerCase().contains(value.toLowerCase())) {
-                jobs.add(job);
-            } else if (job.getDepartment().toLowerCase().contains(value.toLowerCase())) { // Add department case
                 jobs.add(job);
             }
         }
@@ -147,15 +130,11 @@ public class JobData {
      * Read in data from a CSV file and store it in an ArrayList of Job objects.
      */
     private static void loadData() {
-
-        // Only load data once
         if (isDataLoaded) {
             return;
         }
 
         try {
-
-            // Open the CSV file and set up pull out column header info and records
             Resource resource = new ClassPathResource(DATA_FILE);
             InputStream is = resource.getInputStream();
             Reader reader = new InputStreamReader(is);
@@ -166,47 +145,41 @@ public class JobData {
 
             allJobs = new ArrayList<>();
 
-            // Put the records into a more friendly format
             for (CSVRecord record : records) {
-
                 String aName = record.get(0);
                 String anEmployer = record.get(1);
                 String aLocation = record.get(2);
                 String aPosition = record.get(3);
                 String aSkill = record.get(4);
-                String aDepartment = (record.size() > 5) ? record.get(5) : ""; // Check for department column
 
                 Employer newEmployer = (Employer) findExistingObject(allEmployers, anEmployer);
                 Location newLocation = (Location) findExistingObject(allLocations, aLocation);
                 PositionType newPosition = (PositionType) findExistingObject(allPositionTypes, aPosition);
                 CoreCompetency newSkill = (CoreCompetency) findExistingObject(allCoreCompetency, aSkill);
 
-                if (newEmployer == null){
+                if (newEmployer == null) {
                     newEmployer = new Employer(anEmployer);
                     allEmployers.add(newEmployer);
                 }
 
-                if (newLocation == null){
+                if (newLocation == null) {
                     newLocation = new Location(aLocation);
                     allLocations.add(newLocation);
                 }
 
-                if (newSkill == null){
+                if (newSkill == null) {
                     newSkill = new CoreCompetency(aSkill);
                     allCoreCompetency.add(newSkill);
                 }
 
-                if (newPosition == null){
+                if (newPosition == null) {
                     newPosition = new PositionType(aPosition);
                     allPositionTypes.add(newPosition);
                 }
 
-                Job newJob = new Job(aName, newEmployer, newLocation, newPosition, newSkill, aDepartment); // Include department
-
+                Job newJob = new Job(aName, newEmployer, newLocation, newPosition, newSkill);
                 allJobs.add(newJob);
-                allDepartments.add(aDepartment); // Add department to the set
             }
-            // flag the data as loaded, so we don't do it twice
             isDataLoaded = true;
 
         } catch (IOException e) {
@@ -237,12 +210,5 @@ public class JobData {
         loadData();
         allCoreCompetency.sort(new NameSorter());
         return allCoreCompetency;
-    }
-
-    public static ArrayList<String> getAllDepartments() {
-        loadData();
-        ArrayList<String> sortedDepartments = new ArrayList<>(allDepartments);
-        sortedDepartments.sort(String::compareToIgnoreCase);
-        return sortedDepartments;
     }
 }
