@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
-
 <head th:fragment="head">
 
     <!-- Bootstrap stylesheets and script -->
@@ -25,6 +24,32 @@
             </ul>
         </div>
     </div>
+</div>
+
+<div th:fragment="job-details(job)">
+    <table class="job-listing">
+        <tr>
+            <th>Title</th>
+            <td th:text="${job.name}"></td>
+        </tr>
+        <tr>
+            <th>Employer</th>
+            <td th:text="${job.employer.value}"></td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td th:text="${job.location.value}"></td>
+        </tr>
+        <tr>
+            <th>Position Type</th>
+            <td th:text="${job.positionType.value}"></td>
+        </tr>
+        <tr>
+            <th>Skill</th>
+            <td th:text="${job.coreCompetency.value}"></td>
+        </tr>
+    </table>
+    <br/>
 </div>
 
 </body>
