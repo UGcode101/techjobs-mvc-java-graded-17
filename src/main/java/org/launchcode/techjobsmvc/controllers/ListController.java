@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by LaunchCode
- */
 @Controller
 @RequestMapping(value = "list")
 public class ListController {
@@ -21,27 +18,25 @@ public class ListController {
     static HashMap<String, String> columnChoices = new HashMap<>();
     static HashMap<String, Object> tableChoices = new HashMap<>();
 
-    public ListController () {
+    public ListController() {
         columnChoices.put("all", "All");
         columnChoices.put("employer", "Employer");
         columnChoices.put("location", "Location");
         columnChoices.put("positionType", "Position Type");
         columnChoices.put("coreCompetency", "Skill");
+        columnChoices.put("department", "Department");
 
         tableChoices.put("employer", JobData.getAllEmployers());
         tableChoices.put("location", JobData.getAllLocations());
         tableChoices.put("positionType", JobData.getAllPositionTypes());
         tableChoices.put("coreCompetency", JobData.getAllCoreCompetency());
+        tableChoices.put("department", JobData.getAllDepartments());
     }
 
     @GetMapping(value = "")
     public String list(Model model) {
         model.addAttribute("columns", columnChoices);
         model.addAttribute("tableChoices", tableChoices);
-        model.addAttribute("employers", JobData.getAllEmployers());
-        model.addAttribute("locations", JobData.getAllLocations());
-        model.addAttribute("positions", JobData.getAllPositionTypes());
-        model.addAttribute("skills", JobData.getAllCoreCompetency());
 
         return "list";
     }
@@ -49,7 +44,7 @@ public class ListController {
     @GetMapping(value = "jobs")
     public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam(required = false) String value) {
         ArrayList<Job> jobs;
-        if (column.equals("all")){
+        if (column.equals("all")) {
             jobs = JobData.findAll();
             model.addAttribute("title", "All Jobs");
         } else {
@@ -61,4 +56,3 @@ public class ListController {
         return "list-jobs";
     }
 }
-

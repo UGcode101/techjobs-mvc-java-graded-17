@@ -12,6 +12,7 @@ public class Job {
     private Location location;
     private PositionType positionType;
     private CoreCompetency coreCompetency;
+    private String department; // New field
 
     // Initialize a unique ID.
     public Job() {
@@ -20,13 +21,14 @@ public class Job {
     }
 
     // Initialize the id and value fields.
-    public Job(String aName, Employer anEmployer, Location aLocation, PositionType aPositionType, CoreCompetency aCoreCompetency) {
+    public Job(String aName, Employer anEmployer, Location aLocation, PositionType aPositionType, CoreCompetency aCoreCompetency, String aDepartment) {
         this();
         name = aName;
         employer = anEmployer;
         location = aLocation;
         positionType = aPositionType;
         coreCompetency = aCoreCompetency;
+        department = aDepartment; // Initialize the new field
     }
 
     // Custom toString method.
@@ -48,13 +50,17 @@ public class Job {
         if (positionType.getValue().equals("") || positionType.getValue() == null){
             positionType.setValue("Data not available");
         }
+        if (department.equals("") || department == null){
+            department = "Data not available";
+        }
 
         output = String.format("\nID: %d\n" +
                 "Name: %s\n" +
                 "Employer: %s\n" +
                 "Location: %s\n" +
                 "Position Type: %s\n" +
-                "Core Competency: %s\n", id, name, employer, location, positionType, coreCompetency);
+                "Core Competency: %s\n" +
+                "Department: %s\n", id, name, employer, location, positionType, coreCompetency, department);
         return output;
     }
 
@@ -71,7 +77,6 @@ public class Job {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 
     // Getters and setters.
 
@@ -118,5 +123,12 @@ public class Job {
     public void setCoreCompetency(CoreCompetency coreCompetency) {
         this.coreCompetency = coreCompetency;
     }
-}
 
+    public String getDepartment() { // Getter for department
+        return department;
+    }
+
+    public void setDepartment(String department) { // Setter for department
+        this.department = department;
+    }
+}

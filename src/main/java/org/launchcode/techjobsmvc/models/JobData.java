@@ -12,7 +12,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by LaunchCode
@@ -27,18 +29,17 @@ public class JobData {
     private static ArrayList<Location> allLocations = new ArrayList<>();
     private static ArrayList<PositionType> allPositionTypes = new ArrayList<>();
     private static ArrayList<CoreCompetency> allCoreCompetency = new ArrayList<>();
+    private static Set<String> allDepartments = new HashSet<>(); // Using Set to avoid duplicates
 
     /**
      * Fetch list of all job objects from loaded data,
      * without duplicates, then return a copy.
      */
-
     public static ArrayList<Job> findAll() {
 
-        // load data, if not already loaded
+        // Load data, if not already loaded
         loadData();
 
-        // Bonus mission; normal version returns allJobs
         return new ArrayList<>(allJobs);
     }
 
@@ -54,7 +55,7 @@ public class JobData {
      */
     public static ArrayList<Job> findByColumnAndValue(String column, String value) {
 
-        // load data, if not already loaded
+        // Load data, if not already loaded
         loadData();
 
         ArrayList<Job> jobs = new ArrayList<>();
@@ -89,12 +90,17 @@ public class JobData {
             theValue = job.getLocation().toString();
         } else if (fieldName.equals("positionType")){
             theValue = job.getPositionType().toString();
-        } else {
+        } else if (fieldName.equals("coreCompetency")){
             theValue = job.getCoreCompetency().toString();
+        } else if (fieldName.equals("department")){
+            theValue = job.getDepartment(); // Add department case
+        } else {
+            theValue = "";
         }
 
         return theValue;
     }
+
     /**
      * Search all Job fields for the given term.
      *
@@ -103,7 +109,7 @@ public class JobData {
      */
     public static ArrayList<Job> findByValue(String value) {
 
-        // load data, if not already loaded
+        // Load data, if not already loaded
         loadData();
 
         ArrayList<Job> jobs = new ArrayList<>();
@@ -120,8 +126,9 @@ public class JobData {
                 jobs.add(job);
             } else if (job.getCoreCompetency().toString().toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(job);
+            } else if (job.getDepartment().toLowerCase().contains(value.toLowerCase())) { // Add department case
+                jobs.add(job);
             }
-
         }
 
         return jobs;
@@ -167,6 +174,7 @@ public class JobData {
                 String aLocation = record.get(2);
                 String aPosition = record.get(3);
                 String aSkill = record.get(4);
+                String aDepartment = (record.size() > 5) ? record.get(5) : ""; // Check for department column
 
                 Employer newEmployer = (Employer) findExistingObject(allEmployers, anEmployer);
                 Location newLocation = (Location) findExistingObject(allLocations, aLocation);
@@ -193,9 +201,10 @@ public class JobData {
                     allPositionTypes.add(newPosition);
                 }
 
-                Job newJob = new Job(aName, newEmployer, newLocation, newPosition, newSkill);
+                Job newJob = new Job(aName, newEmployer, newLocation, newPosition, newSkill, aDepartment); // Include department
 
                 allJobs.add(newJob);
+                allDepartments.add(aDepartment); // Add department to the set
             }
             // flag the data as loaded, so we don't do it twice
             isDataLoaded = true;
@@ -230,6 +239,10 @@ public class JobData {
         return allCoreCompetency;
     }
 
+    public static ArrayList<String> getAllDepartments() {
+        loadData();
+        ArrayList<String> sortedDepartments = new ArrayList<>(allDepartments);
+        sortedDepartments.sort(String::compareToIgnoreCase);
+        return sortedDepartments;
+    }
 }
-
-
