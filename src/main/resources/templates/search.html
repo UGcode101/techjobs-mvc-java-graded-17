@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link href="/css/bootstrap.css" rel="stylesheet" />
     <link href="/css/techjobs.css" rel="stylesheet" />
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <title>TechJobs :: Jobs with ${title}</title>
+    <title>TechJobs :: Jobs with [[${title}]]</title> <!-- Ensured Thymeleaf processes the title correctly -->
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">

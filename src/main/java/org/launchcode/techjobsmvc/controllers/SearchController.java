@@ -13,22 +13,18 @@ import java.util.ArrayList;
 
 import static org.launchcode.techjobsmvc.controllers.ListController.columnChoices;
 
-/**
- * Created by LaunchCode
- */
 @Controller
 @RequestMapping("search")
 public class SearchController {
 
-    @GetMapping(value = "")
+    @GetMapping("")
     public String search(Model model) {
         model.addAttribute("columns", columnChoices);
         model.addAttribute("title", "Search");
         return "search";
     }
 
-    // Handler to process a search request and render the updated search view
-    @PostMapping(value = "results")
+    @PostMapping("results")
     public String displaySearchResults(Model model, @RequestParam String searchType, @RequestParam String searchTerm) {
         ArrayList<Job> jobs;
 
