@@ -2,18 +2,21 @@ package org.launchcode.techjobsmvc.controllers;
 
 import org.launchcode.techjobsmvc.models.Job;
 import org.launchcode.techjobsmvc.models.JobData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 @Controller
 @RequestMapping(value = "list")
 public class ListController {
+
+    private static final Logger log = LoggerFactory.getLogger(ListController.class);
 
     static HashMap<String, String> columnChoices = new HashMap<>();
     static HashMap<String, Object> tableChoices = new HashMap<>();
@@ -35,7 +38,10 @@ public class ListController {
     public String list(Model model) {
         model.addAttribute("columns", columnChoices);
         model.addAttribute("tableChoices", tableChoices);
-
+        model.addAttribute("employers", JobData.getAllEmployers());
+        model.addAttribute("locations", JobData.getAllLocations());
+        model.addAttribute("positions", JobData.getAllPositionTypes());
+        model.addAttribute("skills", JobData.getAllCoreCompetency());
         return "list";
     }
 
@@ -49,6 +55,10 @@ public class ListController {
             jobs = JobData.findByColumnAndValue(column, value);
             model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
         }
+        log.info("Column: " + column);
+        log.info("Value: " + value);
+        log.info("Jobs: " + jobs.toString());
+        log.info("Core Competency: " + JobData.getAllCoreCompetency());
         model.addAttribute("jobs", jobs);
 
         return "list-jobs";

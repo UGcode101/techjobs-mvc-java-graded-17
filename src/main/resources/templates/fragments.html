@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
-<head th:fragment="head">
+<body>
 
+<!-- Head Fragment -->
+<head th:fragment="head">
     <!-- Bootstrap stylesheets and script -->
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
     <link th:href="@{/css/techjobs.css}" rel="stylesheet" />
@@ -10,8 +12,7 @@
     <title th:text="'TechJobs' + ${title == null ? '' : ' :: ' + title}">TechJobs</title>
 </head>
 
-<body>
-
+<!-- Page Header Fragment -->
 <div th:fragment="page-header" class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -26,6 +27,7 @@
     </div>
 </div>
 
+<!-- Job Details Fragment -->
 <div th:fragment="job-details(job)">
     <table class="job-listing">
         <tr>
