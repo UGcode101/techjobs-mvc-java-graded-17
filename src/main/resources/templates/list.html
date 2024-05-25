@@ -22,7 +22,7 @@
           <a th:href="@{/list/jobs(column='all')}" th:text="'View All'"></a>
         </li>
         <li th:each="item : ${tableChoices[column.key]}" th:if="${column.key != 'all'}">
-          <a th:href="@{/list/jobs(column=${column.key},value=${item})}" th:text="${item}"></a>
+          <a th:href="@{/list/jobs(column=*{column.key},value=*{item})}" th:text="${item}"></a>
         </li>
       </ul>
     </td>

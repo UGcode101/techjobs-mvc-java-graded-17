@@ -8,7 +8,7 @@
 <div class="container body-content">
   <h1 th:text="${title}"></h1>
 
-  <!-- Loop over the job results to display all job fields -->
+  <!-- Loop over the job search results to display all job fields -->
   <div th:each="job : ${jobs}">
     <div th:replace="~{fragments :: job-details(job=${job})}"></div>
   </div>

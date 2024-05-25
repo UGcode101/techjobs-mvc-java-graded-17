@@ -33,11 +33,13 @@ public class SearchController {
             model.addAttribute("title", "All Jobs");
         } else {
             jobs = JobData.findByColumnAndValue(searchType, searchTerm);
-            model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
+            String columnLabel = columnChoices.get(searchType); // Ensure this maps correctly
+            model.addAttribute("title", "Jobs with " + columnLabel + ": " + searchTerm);
         }
 
         model.addAttribute("columns", columnChoices);
         model.addAttribute("jobs", jobs);
+        model.addAttribute("searchTerm", searchTerm); // Add searchTerm to the model
 
         return "search";
     }

@@ -51,6 +51,15 @@ public class TestTaskTwo {
      * */
     @Test
     public void testJobListingDisplaysAllJobFields () throws Exception {
+        String content = mockMvc.perform(get("/list/jobs?column=coreCompetency&value=Ruby"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        // Print out the content for manual inspection
+        System.out.println(content);
+
         mockMvc.perform(get("/list/jobs?column=coreCompetency&value=Ruby"))
                 .andExpect(status().isOk())
                 .andExpect(xpath("//table[contains(@class, 'job-listing')][1]/tr/td[contains(text(), '3')]").exists())
@@ -72,7 +81,7 @@ public class TestTaskTwo {
                 .andExpect(xpath("//table[contains(@class, 'job-listing')][2]").exists())
                 .andExpect(xpath("//table[contains(@class, 'job-listing')][3]").exists())
                 .andExpect(xpath("//table[contains(@class, 'job-listing')][4]").doesNotExist());
-    }
+        }
 
     /*
      * Checks for the "View All" link on /list
