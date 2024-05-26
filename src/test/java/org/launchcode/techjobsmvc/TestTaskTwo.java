@@ -51,7 +51,7 @@ public class TestTaskTwo {
      * */
     @Test
     public void testJobListingDisplaysAllJobFields () throws Exception {
-        String content = mockMvc.perform(get("/list/jobs?column=coreCompetency&value=Ruby"))
+        String content = mockMvc.perform(get("/list/jobs?column=coreCompetency&value=vscodeRuby"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()

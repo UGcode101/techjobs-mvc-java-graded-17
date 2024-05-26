@@ -1,19 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org/">
-<head th:replace="~{fragments :: head}"></head>
+<html>
+<head>
+  <link href="/css/bootstrap.css" rel="stylesheet" />
+  <link href="/css/techjobs.css" rel="stylesheet" />
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+  <title>TechJobs :: Jobs with [[${title}]]</title>
+</head>
 <body>
-
-<div th:replace="~{fragments :: page-header}"></div>
-
-<div class="container body-content">
-  <h1 th:text="${title}"></h1>
-
-  <!-- Loop over the job search results to display all job fields -->
-  <div th:each="job : ${jobs}">
-    <div th:replace="~{fragments :: job-details(job=${job})}"></div>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">TechJobs</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/search">Search</a></li>
+        <li><a href="/list">List</a></li>
+      </ul>
+    </div>
   </div>
-
 </div>
-
+<div class="container body-content">
+  <h1>Jobs with [[${title}]]</h1>
+  <form action="/search/results" method="post">
+    <h2>Search by:</h2>
+    <p>
+            <span>
+                <input type="radio" name="searchType" id="all" value="all" checked="checked"/>
+                <label for="all">All</label>
+            </span>
+      <span>
+                <input type="radio" name="searchType" id="positionType" value="positionType"/>
+                <label for="positionType">Position Type</label>
+            </span>
+      <span>
+                <input type="radio" name="searchType" id="employer" value="employer"/>
+                <label for="employer">Employer</label>
+            </span>
+      <span>
+                <input type="radio" name="searchType" id="coreCompetency" value="coreCompetency"/>
+                <label for="coreCompetency">Skill</label>
+            </span>
+      <span>
+                <input type="radio" name="searchType" id="location" value="location"/>
+                <label for="location">Location</label>
+            </span>
+    </p>
+    <p>
+      <label for="searchTerm">Keyword:</label>
+      <input type="text" name="searchTerm" id="searchTerm"/>
+    </p>
+    <input type="submit" value="Search"/>
+  </form>
+  <hr />
+  <!-- Loop over the search results to display all job fields -->
+  <div th:if="${jobs != null}">
+      <table th:replace="fragments :: job-details"></table>
+  </div>
+</div>
 </body>
 </html>
